@@ -1,0 +1,15 @@
+com\ehealth\mpi\entity\IdDocument$DocType.class
+com\ehealth\mpi\service\ServicePatient.class
+com\ehealth\mpi\entity\Citizen.class
+com\ehealth\mpi\dao\IPatientDAO.class
+com\ehealth\mpi\entity\MpiId.class
+com\ehealth\mpi\config\AppConfiguration.class
+com\ehealth\mpi\entity\Address.class
+com\ehealth\mpi\entity\Patient.class
+com\ehealth\mpi\config\SpringWebConfig.class
+com\ehealth\mpi\entity\Contactpoint$TypeContactpoint.class
+com\ehealth\mpi\entity\Address$Region.class
+com\ehealth\mpi\entity\Contactpoint.class
+com\ehealth\mpi\entity\IdDocument.class
+com\ehealth\mpi\controller\PatientController.class
+com\ehealth\mpi\config\AppInitializer.class
