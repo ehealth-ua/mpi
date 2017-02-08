@@ -1,2 +1,2 @@
-com\ehealth\mpi\test\TestServicePatient.class
-com\ehealth\mpi\test\TestRestController.class
+com\ehealth\mpi\embeddedtest\TestRestController.class
+com\ehealth\mpi\embeddedtest\TestServicePatient.class

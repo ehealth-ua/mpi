@@ -35,9 +35,9 @@ public class AppConfiguration {
 	private String driver;
 	@Value("${url}")
 	private String url;
-	@Value("${user}")
+	@Value("${user.db}")
 	private String userdb;
-	@Value("${password}")
+	@Value("${password.db}")
 	private String passworddb;
 
 	@Bean

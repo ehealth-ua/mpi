@@ -12,8 +12,9 @@ import javax.persistence.Id;
 public class Patient {
 
 	@Id
-	@Column(name = "id", unique = true, nullable = false)
-	@AttributeOverride(name = "surname", column = @Column(name = "person_surname"))
+	@AttributeOverrides({ @AttributeOverride(name = "id", column = @Column(name = "id")),
+	@AttributeOverride(name = "ttl", column = @Column(name = "ttl")) })
+@Column(name = "person")
 	private MpiId mpiId;
 	@AttributeOverrides({ @AttributeOverride(name = "name", column = @Column(name = "person_name")),
 			@AttributeOverride(name = "surname", column = @Column(name = "person_surname")),
@@ -167,15 +168,8 @@ public class Patient {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((additionalDocument == null) ? 0 : additionalDocument.hashCode());
-		result = prime * result + ((address == null) ? 0 : address.hashCode());
-		result = prime * result + ((document == null) ? 0 : document.hashCode());
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		result = prime * result + ((emergencyContact == null) ? 0 : emergencyContact.hashCode());
-		result = prime * result + ((mpiId == null) ? 0 : mpiId.hashCode());
+		result = prime * result + ((address == null) ? 0 : address.getLocality().hashCode());
 		result = prime * result + ((person == null) ? 0 : person.hashCode());
-		result = prime * result + ((phone == null) ? 0 : phone.hashCode());
-		result = prime * result + ((relatedPerson == null) ? 0 : relatedPerson.hashCode());
 		return result;
 	}
 
@@ -188,50 +182,15 @@ public class Patient {
 		if (getClass() != obj.getClass())
 			return false;
 		Patient other = (Patient) obj;
-		if (additionalDocument == null) {
-			if (other.additionalDocument != null)
-				return false;
-		} else if (!additionalDocument.equals(other.additionalDocument))
-			return false;
 		if (address == null) {
 			if (other.address != null)
 				return false;
 		} else if (!address.equals(other.address))
 			return false;
-		if (document == null) {
-			if (other.document != null)
-				return false;
-		} else if (!document.equals(other.document))
-			return false;
-		if (email == null) {
-			if (other.email != null)
-				return false;
-		} else if (!email.equals(other.email))
-			return false;
-		if (emergencyContact == null) {
-			if (other.emergencyContact != null)
-				return false;
-		} else if (!emergencyContact.equals(other.emergencyContact))
-			return false;
-		if (mpiId == null) {
-			if (other.mpiId != null)
-				return false;
-		} else if (!mpiId.equals(other.mpiId))
-			return false;
 		if (person == null) {
 			if (other.person != null)
 				return false;
 		} else if (!person.equals(other.person))
-			return false;
-		if (phone == null) {
-			if (other.phone != null)
-				return false;
-		} else if (!phone.equals(other.phone))
-			return false;
-		if (relatedPerson == null) {
-			if (other.relatedPerson != null)
-				return false;
-		} else if (!relatedPerson.equals(other.relatedPerson))
 			return false;
 		return true;
 	}
