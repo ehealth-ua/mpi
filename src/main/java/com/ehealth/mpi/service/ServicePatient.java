@@ -12,7 +12,7 @@ import com.ehealth.mpi.entity.Patient;
 public class ServicePatient {
 
 	@Autowired
-	IPatientDAO iPatientDAO;
+	private IPatientDAO iPatientDAO;
 
 	public Patient save(Patient patient) {
 		return iPatientDAO.save(patient);
