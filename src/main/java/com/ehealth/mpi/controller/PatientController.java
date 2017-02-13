@@ -20,10 +20,10 @@ import com.ehealth.mpi.validator.DataValidator;
 public class PatientController {
 
 	@Autowired
-	ServicePatient servicePatient;
+	private ServicePatient servicePatient;
 
 	@Autowired
-	DataValidator dataValidator;
+	private DataValidator dataValidator;
 
 	@GetMapping(value = "/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Patient> getPatientBy(String id) {
@@ -46,7 +46,7 @@ public class PatientController {
 
 	@PutMapping(value = "/patient", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Patient> updatePatient(Patient patient) {
-		if ((patient == null) && (!dataValidator.isValid((patient)))) {
+		if ((patient == null) && (!dataValidator.isValid(patient))) {
 			return new ResponseEntity<Patient>(patient, HttpStatus.BAD_REQUEST);
 		}
 		Patient findedInDb = servicePatient.getPatientBy(patient.getId());

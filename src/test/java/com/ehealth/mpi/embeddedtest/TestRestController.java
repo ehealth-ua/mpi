@@ -1,7 +1,7 @@
 package com.ehealth.mpi.embeddedtest;
 
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.ObjectWriter;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
