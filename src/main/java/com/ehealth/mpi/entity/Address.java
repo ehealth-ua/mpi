@@ -15,21 +15,24 @@ public class Address {
 	@Column(nullable = false)
 	private String zip;
 	@Column(nullable = false)
-	private String locality;
+	private String place;
+	@Column(nullable = false)
 	@Enumerated(EnumType.ORDINAL)
 	private Region region;
+	@Column(nullable = false)
 	private String street;
 	@Column(nullable = false)
 	private String house;
+	@Column(nullable = false)
 	private String apt;
 
 	public Address() {
 	}
 
-	public Address(String zip, String locality, Region region, String street, String house, String apt) {
+	public Address(String zip, String place, Region region, String street, String house, String apt) {
 		super();
 		this.zip = zip;
-		this.locality = locality;
+		this.place = place;
 		this.region = region;
 		this.street = street;
 		this.house = house;
@@ -44,12 +47,12 @@ public class Address {
 		this.zip = zip;
 	}
 
-	public String getLocality() {
-		return locality;
+	public String getPlace() {
+		return place;
 	}
 
-	public void setLocality(String locality) {
-		this.locality = locality;
+	public void setPlace(String place) {
+		this.place = place;
 	}
 
 	public Region getRegion() {
@@ -84,41 +87,4 @@ public class Address {
 		this.apt = apt;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((house == null) ? 0 : house.hashCode());
-		result = prime * result + ((locality == null) ? 0 : locality.hashCode());
-		result = prime * result + ((zip == null) ? 0 : zip.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Address other = (Address) obj;
-		if (house == null) {
-			if (other.house != null)
-				return false;
-		} else if (!house.equals(other.house))
-			return false;
-		if (locality == null) {
-			if (other.locality != null)
-				return false;
-		} else if (!locality.equals(other.locality))
-			return false;
-		if (zip == null) {
-			if (other.zip != null)
-				return false;
-		} else if (!zip.equals(other.zip))
-			return false;
-		return true;
-	}
- 
 }

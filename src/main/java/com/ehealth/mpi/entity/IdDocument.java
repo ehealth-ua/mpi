@@ -1,9 +1,15 @@
 package com.ehealth.mpi.entity;
 
+import java.util.Calendar;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Embeddable
 public class IdDocument {
@@ -12,17 +18,22 @@ public class IdDocument {
 		pasport, travelPassport, birthCertificate, driversLicense, schoolId, studentId, militaryId, officialID;
 	}
 
+	@Column(nullable = false)
 	@Enumerated(EnumType.ORDINAL)
 	private DocType type;
 	@Column(nullable = false)
 	private String number;
-	private String issuedOn;
-	private String expiredOn;
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm a z")
+	private Calendar issuedOn;
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm a z")
+	private Calendar expiredOn;
 
 	public IdDocument() {
 	}
 
-	public IdDocument(DocType type, String number, String issuedOn, String expiredOn) {
+	public IdDocument(DocType type, String number, Calendar issuedOn, Calendar expiredOn) {
 		super();
 		this.type = type;
 		this.number = number;
@@ -46,45 +57,19 @@ public class IdDocument {
 		this.number = number;
 	}
 
-	public String getIssuedOn() {
+	public Calendar getIssuedOn() {
 		return issuedOn;
 	}
 
-	public void setIssuedOn(String issuedOn) {
+	public void setIssuedOn(Calendar issuedOn) {
 		this.issuedOn = issuedOn;
 	}
 
-	public String getExpiredOn() {
+	public Calendar getExpiredOn() {
 		return expiredOn;
 	}
 
-	public void setExpiredOn(String expiredOn) {
+	public void setExpiredOn(Calendar expiredOn) {
 		this.expiredOn = expiredOn;
 	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((number == null) ? 0 : number.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		IdDocument other = (IdDocument) obj;
-		if (number == null) {
-			if (other.number != null)
-				return false;
-		} else if (!number.equals(other.number))
-			return false;
-		return true;
-	}
-
 }

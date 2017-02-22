@@ -1,10 +1,15 @@
 package com.ehealth.mpi.controller;
 
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,60 +17,60 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ehealth.mpi.entity.Patient;
-import com.ehealth.mpi.service.ServicePatient;
-import com.ehealth.mpi.validator.DataValidator;
+import com.ehealth.mpi.service.PatientServiceImpl;
+import com.ehealth.mpi.service.ValidationService;
 
 @RestController
-@RequestMapping("/mip")
+@RequestMapping(path = "/mip", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class PatientController {
 
 	@Autowired
-	private ServicePatient servicePatient;
+	private PatientServiceImpl patientService;
 
 	@Autowired
-	private DataValidator dataValidator;
+	private ValidationService myBeanValidationService;
 
-	@GetMapping(value = "/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Patient> getPatientBy(String id) {
-		Patient patient = servicePatient.getPatientBy(id);
-		return new ResponseEntity<Patient>(patient, HttpStatus.OK);
+	@GetMapping(value = "/id/{id}")
+	public ResponseEntity<?> getPatientBy(@PathVariable Long id) {
+		Patient patient = patientService.getPatientBy(id);
+		if (patient == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Patient is null");
+		}
+		Set<ConstraintViolation<Patient>> validateViolations = myBeanValidationService.validatePatient(patient);
+		if (!validateViolations.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body(myBeanValidationService.listViolations(validateViolations));
+		} else {
+			return new ResponseEntity<Patient>(patient, HttpStatus.OK);
+		}
 	}
 
-	@PostMapping(value = "/patient", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Patient> addPatient(@RequestBody Patient patient) {
-		if ((patient == null) && (!dataValidator.isValid((patient)))) {
-			return new ResponseEntity<Patient>(patient, HttpStatus.BAD_REQUEST);
+	@PostMapping(value = "/patient")
+	public ResponseEntity<?> addPatient(@RequestBody Patient patient) {
+		Set<ConstraintViolation<Patient>> validateViolations = myBeanValidationService.validatePatient(patient);
+		if (!validateViolations.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body(myBeanValidationService.listViolations(validateViolations));
 		}
-		Patient findedInDb = servicePatient.getPatientBy(patient.getId());
-		if ((findedInDb != null) && (patient.equals(findedInDb))) {
+		if (patient.equals(patientService.getPatientBy(patient.getId()))) {
 			return new ResponseEntity<Patient>(patient, HttpStatus.CONFLICT);
 		}
-		servicePatient.save(patient);
+		patientService.save(patient);
 		return new ResponseEntity<Patient>(patient, HttpStatus.CREATED);
 	}
 
-	@PutMapping(value = "/patient", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Patient> updatePatient(Patient patient) {
-		if ((patient == null) && (!dataValidator.isValid(patient))) {
-			return new ResponseEntity<Patient>(patient, HttpStatus.BAD_REQUEST);
+	@PutMapping(value = "/patient")
+	public ResponseEntity<?> updatePatient(@RequestBody Patient patient) {
+		if (patientService.getPatientBy(patient.getId()) == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Patient is null");
 		}
-		Patient findedInDb = servicePatient.getPatientBy(patient.getId());
-		if ((findedInDb != null) && (patient.equals(findedInDb))) {
-			return new ResponseEntity<Patient>(patient, HttpStatus.CONFLICT);
+		Set<ConstraintViolation<Patient>> validateViolations = myBeanValidationService.validatePatient(patient);
+		if (!validateViolations.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body(myBeanValidationService.listViolations(validateViolations));
 		}
+		patientService.update(patient);
 		return new ResponseEntity<Patient>(patient, HttpStatus.CREATED);
 	}
-
-	// @PostMapping(value = "/id/{id}", produces =
-	// MediaType.APPLICATION_JSON_VALUE)
-	// public ResponseEntity<Patient> generatedMPIIndex(@PathVariable String id)
-	// {
-	// Patient patient = servicePatient.getPatientBy(id);
-	// if (patient == null) {
-	// return new ResponseEntity<Patient>(patient, HttpStatus.NOT_FOUND);
-	// }
-	// servicePatient.generatedMpiIndex(patient);
-	// return new ResponseEntity<Patient>(HttpStatus.CREATED);
-	// }
 
 }

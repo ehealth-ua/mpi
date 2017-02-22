@@ -14,7 +14,7 @@ public class AppInitializer implements WebApplicationInitializer {
 		// Load application context
 		AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
 		rootContext.register(AppConfiguration.class);
-		rootContext.register(SpringWebConfig.class);
+		rootContext.register(WebMvcConfig.class);
 
 		rootContext.setServletContext(container);
 		rootContext.setDisplayName("ehealth");
